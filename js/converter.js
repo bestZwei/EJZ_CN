@@ -39,22 +39,31 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Split text into characters
-    const chars = Array.from(text);
-    
-    // Create HTML output
+    // 处理文本行，保留换行符
+    const lines = text.split('\n');
     let html = '';
     
-    chars.forEach(char => {
-      if (erzhDict[char]) {
-        const glyphId = erzhDict[char];
-        const svgUrl = `${SVG_URL}${glyphId}.svg`;
-        html += `<span class="erzh-container">
-                   <img class="erzh-char" src="${svgUrl}" alt="${char}" title="${char}">
-                   <span class="erzh-char-original" style="display: none;">${char}</span>
-                 </span>`;
-      } else {
-        html += `<span>${char}</span>`;
+    lines.forEach((line, lineIndex) => {
+      // 分割每行文本为字符数组
+      const chars = Array.from(line);
+      
+      // 处理每个字符
+      chars.forEach(char => {
+        if (erzhDict[char]) {
+          const glyphId = erzhDict[char];
+          const svgUrl = `${SVG_URL}${glyphId}.svg`;
+          html += `<span class="erzh-container">
+                     <img class="erzh-char" src="${svgUrl}" alt="${char}" title="${char}">
+                     <span class="erzh-char-original" style="display: none;">${char}</span>
+                   </span>`;
+        } else {
+          html += `<span>${char}</span>`;
+        }
+      });
+      
+      // 在每行末尾添加换行符，除非是最后一行
+      if (lineIndex < lines.length - 1) {
+        html += '<br>';
       }
     });
     
