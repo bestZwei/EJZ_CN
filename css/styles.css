@@ -181,14 +181,37 @@ button i {
   border: 1px solid var(--border-color);
   word-break: break-all;
   line-height: 1.8;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* 包含二简字图像的容器 */
+.erzh-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  letter-spacing: normal;
+}
+
+.output-content > span {
+  display: inline-flex;
+  align-items: center;
+  height: 1.5em;
+  letter-spacing: normal;
 }
 
 .erzh-char {
   display: inline-block;
   vertical-align: middle;
-  height: 1em; /* 从1.2em改为1em，使其与普通文字大小更接近 */
-  max-width: 1em; /* 从1.2em改为1em，保持宽度与高度一致 */
-  margin-bottom: 0.1em; /* 添加底部微调，解决一些字体基线对齐问题 */
+  height: 1em;
+  width: 1em;
+  max-width: 1em;
+  margin: 0;
+  padding: 0;
+  object-fit: contain;
 }
 
 .info-section {
