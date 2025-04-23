@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const copyBtn = document.getElementById('copyBtn');
   const viewToggle = document.getElementById('viewToggle');
   const exportImageBtn = document.getElementById('exportImageBtn');
+  const copyImageBtn = document.getElementById('copyImageBtn');
 
   // Set URL for the SVG images
   const SVG_URL = 'https://glyphwiki.org/glyph/';
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
   copyBtn.addEventListener('click', copyOutput);
   viewToggle.addEventListener('click', toggleViewMode);
   exportImageBtn.addEventListener('click', exportAsImage);
+  copyImageBtn.addEventListener('click', copyAsImage);
   
   // Check if URL contains query parameter
   const urlParams = new URLSearchParams(window.location.search);
@@ -202,11 +204,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /**
    * Exports the current output content as an image
+   * @param {boolean} copyToClipboard - Whether to copy to clipboard instead of downloading
    */
-  function exportAsImage() {
+  function exportAsImage(copyToClipboard = false) {
     const outputContent = outputText.innerHTML;
     if (outputContent === '转换后的内容将显示在这里...') {
-      showToast('请先转换文本再导出图片');
+      showToast(copyToClipboard ? '请先转换文本再复制图片' : '请先转换文本再导出图片');
       return;
     }
 
@@ -215,9 +218,10 @@ document.addEventListener('DOMContentLoaded', () => {
     container.style.position = 'absolute';
     container.style.left = '-9999px';
     container.style.top = '-9999px';
-    container.style.width = outputText.offsetWidth + 'px';
     container.style.backgroundColor = 'white';
-    container.style.padding = '20px';
+    container.style.padding = '10px'; // Reduced padding for less whitespace
+    container.style.maxWidth = outputText.offsetWidth + 'px';
+    container.style.display = 'inline-block'; // Changed to inline-block to wrap content
     container.style.fontFamily = window.getComputedStyle(outputText).fontFamily;
     container.style.fontSize = window.getComputedStyle(outputText).fontSize;
     container.style.lineHeight = window.getComputedStyle(outputText).lineHeight;
@@ -235,17 +239,55 @@ document.addEventListener('DOMContentLoaded', () => {
       // Remove the temporary container
       document.body.removeChild(container);
       
-      // Create a download link
-      const link = document.createElement('a');
-      link.download = '二简字转换结果.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      
-      showToast('图片已成功导出');
+      if (copyToClipboard) {
+        // Copy the canvas to clipboard
+        canvas.toBlob(blob => {
+          try {
+            // Try to use the modern Clipboard API
+            if (navigator.clipboard && navigator.clipboard.write) {
+              const clipboardItem = new ClipboardItem({ 'image/png': blob });
+              navigator.clipboard.write([clipboardItem])
+                .then(() => showToast('图片已成功复制到剪贴板'))
+                .catch(err => {
+                  console.error('复制图片失败:', err);
+                  showToast('复制图片失败，请重试');
+                });
+            } else {
+              // Fallback for browsers without Clipboard API support
+              showToast('您的浏览器不支持直接复制图片');
+              // Create a temporary link to download instead
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.download = '二简字转换结果.png';
+              link.href = url;
+              link.click();
+              URL.revokeObjectURL(url);
+            }
+          } catch (err) {
+            console.error('复制图片失败:', err);
+            showToast('复制图片失败，请重试');
+          }
+        });
+      } else {
+        // Create a download link
+        const link = document.createElement('a');
+        link.download = '二简字转换结果.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        
+        showToast('图片已成功导出');
+      }
     }).catch(err => {
-      console.error('导出图片失败:', err);
+      console.error('处理图片失败:', err);
       document.body.removeChild(container);
-      showToast('导出图片失败，请重试');
+      showToast(copyToClipboard ? '复制图片失败，请重试' : '导出图片失败，请重试');
     });
+  }
+
+  /**
+   * Copies the current output content as an image to clipboard
+   */
+  function copyAsImage() {
+    exportAsImage(true);
   }
 });

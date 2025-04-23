@@ -162,13 +162,13 @@ button i {
   gap: 0.8rem;
 }
 
-/* Style for the export image button */
-#exportImageBtn {
+/* Style for the export and copy image buttons */
+#exportImageBtn, #copyImageBtn {
   background-color: transparent;
   color: var(--primary-color);
 }
 
-#exportImageBtn:hover {
+#exportImageBtn:hover, #copyImageBtn:hover {
   background-color: var(--secondary-color);
   color: white;
 }
@@ -211,6 +211,18 @@ button i {
   height: 1.1em; /* 从1em增加到1.1em，使字体稍大一些 */
   width: 1.1em; /* 从1em增加到1.1em，保持宽高一致 */
   max-width: 1.1em; /* 从1em增加到1.1em */
+  margin: 0;
+  padding: 0;
+  object-fit: contain;
+}
+
+/* Fix to ensure image output is appropriately sized */
+.output-content img.erzh-char {
+  display: inline-block;
+  vertical-align: middle;
+  height: 1.1em;
+  width: 1.1em;
+  max-width: 1.1em;
   margin: 0;
   padding: 0;
   object-fit: contain;
