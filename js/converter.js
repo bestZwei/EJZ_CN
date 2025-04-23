@@ -20,8 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
   clearBtn.addEventListener('click', clearText);
   copyBtn.addEventListener('click', copyOutput);
   viewToggle.addEventListener('click', toggleViewMode);
-  exportImageBtn.addEventListener('click', exportAsImage);
-  copyImageBtn.addEventListener('click', copyAsImage);
+  exportImageBtn.addEventListener('click', () => exportAsImage(false)); // Explicitly pass false
+  copyImageBtn.addEventListener('click', () => exportAsImage(true));    // Explicitly pass true
   
   // Check if URL contains query parameter
   const urlParams = new URLSearchParams(window.location.search);
@@ -291,12 +291,5 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       showToast(copyToClipboard ? '复制图片失败，请重试' : '下载图片失败，请重试');
     });
-  }
-
-  /**
-   * Copies the current output content as an image to clipboard
-   */
-  function copyAsImage() {
-    exportAsImage(true);
   }
 });
