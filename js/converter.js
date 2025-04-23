@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function exportAsImage(copyToClipboard = false) {
     const outputContent = outputText.innerHTML;
     if (outputContent === '转换后的内容将显示在这里...') {
-      showToast(copyToClipboard ? '请先转换文本再复制图片' : '请先转换文本再导出图片');
+      showToast(copyToClipboard ? '请先转换文本再复制图片' : '请先转换文本再下载图片');
       return;
     }
 
@@ -270,17 +270,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       } else {
         // Create a download link
-        const link = document.createElement('a');
-        link.download = '二简字转换结果.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        
-        showToast('图片已成功导出');
+        canvas.toBlob(blob => {
+          // Create a download URL from the blob
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.download = '二简字转换结果.png';
+          link.href = url;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+          
+          showToast('图片已成功下载');  // Changed from '图片已成功导出' to '图片已成功下载'
+        });
       }
     }).catch(err => {
       console.error('处理图片失败:', err);
-      document.body.removeChild(container);
-      showToast(copyToClipboard ? '复制图片失败，请重试' : '导出图片失败，请重试');
+      if (document.body.contains(container)) {
+        document.body.removeChild(container);
+      }
+      showToast(copyToClipboard ? '复制图片失败，请重试' : '下载图片失败，请重试');
     });
   }
 
