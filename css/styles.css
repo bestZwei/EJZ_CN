@@ -162,6 +162,17 @@ button i {
   gap: 0.8rem;
 }
 
+/* Style for the export image button */
+#exportImageBtn {
+  background-color: transparent;
+  color: var(--primary-color);
+}
+
+#exportImageBtn:hover {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
 .output-content {
   background-color: var(--background-color);
   min-height: 200px;

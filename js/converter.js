@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const clearBtn = document.getElementById('clearBtn');
   const copyBtn = document.getElementById('copyBtn');
   const viewToggle = document.getElementById('viewToggle');
+  const exportImageBtn = document.getElementById('exportImageBtn');
 
   // Set URL for the SVG images
   const SVG_URL = 'https://glyphwiki.org/glyph/';
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   clearBtn.addEventListener('click', clearText);
   copyBtn.addEventListener('click', copyOutput);
   viewToggle.addEventListener('click', toggleViewMode);
+  exportImageBtn.addEventListener('click', exportAsImage);
   
   // Check if URL contains query parameter
   const urlParams = new URLSearchParams(window.location.search);
@@ -187,5 +189,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }, 300);
     }, 3000);
+  }
+
+  /**
+   * Exports the current output content as an image
+   */
+  function exportAsImage() {
+    const outputContent = outputText.innerHTML;
+    if (outputContent === '转换后的内容将显示在这里...') {
+      showToast('请先转换文本再导出图片');
+      return;
+    }
+
+    // Create a container for the content to be rendered
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.left = '-9999px';
+    container.style.top = '-9999px';
+    container.style.width = outputText.offsetWidth + 'px';
+    container.style.backgroundColor = 'white';
+    container.style.padding = '20px';
+    container.style.fontFamily = window.getComputedStyle(outputText).fontFamily;
+    container.style.fontSize = window.getComputedStyle(outputText).fontSize;
+    container.style.lineHeight = window.getComputedStyle(outputText).lineHeight;
+    container.innerHTML = outputContent;
+    document.body.appendChild(container);
+
+    // Use html2canvas to render the content
+    html2canvas(container, { 
+      allowTaint: true, 
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      scale: 2, // Higher resolution
+      logging: false
+    }).then(canvas => {
+      // Remove the temporary container
+      document.body.removeChild(container);
+      
+      // Create a download link
+      const link = document.createElement('a');
+      link.download = '二简字转换结果.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      
+      showToast('图片已成功导出');
+    }).catch(err => {
+      console.error('导出图片失败:', err);
+      document.body.removeChild(container);
+      showToast('导出图片失败，请重试');
+    });
   }
 });
