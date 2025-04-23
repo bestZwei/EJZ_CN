@@ -16,7 +16,7 @@
 }
 
 body {
-  font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'SimSun', '宋体', serif;
   background-color: var(--background-color);
   color: var(--text-color);
   line-height: 1.6;
@@ -185,6 +185,17 @@ button i {
   white-space: pre-wrap;
 }
 
+/* Make regular text in output box bold */
+.output-content > span:not(.erzh-container) {
+  font-weight: bold;
+  font-size: 1.05em; /* Increase size of normal text by 1.05 times */
+}
+
+/* Make the default text (when no conversion is done) normal weight */
+.output-content:only-child {
+  font-weight: normal;
+}
+
 /* 包含二简字图像的容器 */
 .erzh-container {
   display: inline-flex;
@@ -208,9 +219,9 @@ button i {
 .erzh-char {
   display: inline-block;
   vertical-align: middle;
-  height: 1em; /* 从1em增加到1.1em，使字体稍大一些 */
-  width: 1em; /* 从1em增加到1.1em，保持宽高一致 */
-  max-width: 1em; /* 从1em增加到1.1em */
+  height: 1em; 
+  width: 1em;
+  max-width: 1em;
   margin: 0;
   padding: 0;
   object-fit: contain;

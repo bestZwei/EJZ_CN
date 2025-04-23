@@ -226,6 +226,24 @@ document.addEventListener('DOMContentLoaded', () => {
     container.style.fontSize = window.getComputedStyle(outputText).fontSize;
     container.style.lineHeight = window.getComputedStyle(outputText).lineHeight;
     container.innerHTML = outputContent;
+    
+    // Adjust the vertical alignment of 二简字 characters specifically for image export
+    const imageStyleFix = document.createElement('style');
+    imageStyleFix.textContent = `
+      .erzh-container { 
+        vertical-align: middle !important;
+        display: inline-flex !important;
+        align-items: center !important;
+      }
+      .erzh-char {
+        vertical-align: middle !important;
+        position: relative !important;
+        top: -0.05em !important; /* Move characters slightly upward */
+        height: 1.05em !important;
+        width: 1.05em !important;
+      }
+    `;
+    container.appendChild(imageStyleFix);
     document.body.appendChild(container);
 
     // Use html2canvas to render the content
