@@ -186,8 +186,9 @@ button i {
 .erzh-char {
   display: inline-block;
   vertical-align: middle;
-  height: 1.2em;
-  max-width: 1.2em;
+  height: 1em; /* 从1.2em改为1em，使其与普通文字大小更接近 */
+  max-width: 1em; /* 从1.2em改为1em，保持宽度与高度一致 */
+  margin-bottom: 0.1em; /* 添加底部微调，解决一些字体基线对齐问题 */
 }
 
 .info-section {
