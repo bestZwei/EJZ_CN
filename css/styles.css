@@ -180,10 +180,8 @@ button i {
   border-radius: 8px;
   border: 1px solid var(--border-color);
   word-break: break-all;
-  line-height: 1.8;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  line-height: 1.4; /* 从1.8减小到1.4以减少行间距 */
+  display: block; /* 改为block而非flex布局，避免影响行间距 */
 }
 
 /* 包含二简字图像的容器 */
@@ -194,13 +192,16 @@ button i {
   margin: 0;
   padding: 0;
   letter-spacing: normal;
+  vertical-align: middle; /* 确保垂直对齐一致 */
+  line-height: 1.2; /* 为容器设置较小的行高 */
 }
 
 .output-content > span {
   display: inline-flex;
   align-items: center;
-  height: 1.5em;
+  height: 1.2em; /* 从1.5em减小到1.2em来减少额外的行高 */
   letter-spacing: normal;
+  vertical-align: middle; /* 确保垂直对齐一致 */
 }
 
 .erzh-char {
