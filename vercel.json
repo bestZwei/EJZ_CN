@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "name": "erzh-converter",
+  "builds": [
+    { "src": "**/*", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/$1" }
+  ],
+  "github": {
+    "silent": true
+  }
+}
