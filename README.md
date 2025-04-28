@@ -1,3 +1,5 @@
+### 此仓库不再更新，请移步的 honoka55 项目 https://honoka55.github.io/erjian-convert/
+
 # 二简字转换器 (Second-Stage Chinese Character Converter)
 
 这个项目是一个在线工具，用于将简体中文文本转换为「第二次汉字简化方案」（俗称"二简字"）。
